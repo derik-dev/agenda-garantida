@@ -99,3 +99,19 @@ ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
 -- 1. Cadastrar novos usuários em /register
 -- 2. Criar horários no dashboard
 -- 3. Permitir agendamentos públicos em /agendamento/:slug
+
+-- ========================================
+-- ⚠️ IMPORTANTE: AGENDAMENTO SEGURO
+-- ========================================
+-- Para o agendamento público funcionar corretamente COM as
+-- políticas RLS acima, é necessário executar TAMBÉM o script:
+--
+--   📄 book_slot_migration.sql
+--
+-- Este script cria a função RPC "book_slot" que permite que
+-- usuários anônimos façam agendamentos de forma SEGURA, sem
+-- precisar de permissão direta de UPDATE na tabela de slots.
+--
+-- A função usa SECURITY DEFINER para bypassar RLS de forma
+-- controlada, com lock atômico para evitar race conditions
+-- e reserva temporária de 15 minutos.
